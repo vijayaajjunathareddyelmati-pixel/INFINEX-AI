@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INFINEX AI</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080b16">
+</head>
+<body>
+
+<header>
+  <h2>✦ INFINEX AI</h2>
+  <div><span id="clock"></span> | <span id="date"></span></div>
+</header>
+
+<main>
+  <aside>
+    <button onclick="newChat()">＋ New Chat</button>
+
+    <h3>Chat History</h3>
+    <div id="history"></div>
+
+    <button onclick="renameChat()">✏️ Rename Chat</button>
+    <button onclick="clearHistory()">🗑 Delete Chat</button>
+    <button onclick="reminder()">⏰ Reminder</button>
+  </aside>
+
+  <section>
+    <div class="orb">✦</div>
+    <h1>INFINEX <span>AI</span></h1>
+    <p>Intelligence Beyond Limits.</p>
+
+    <div id="chat" aria-live="polite">
+      <p><b>INFINEX AI:</b> Hello! How can I help you today?</p>
+    </div>
+
+    <div id="imagePreview"></div>
+
+    <input
+      type="file"
+      id="imageInput"
+      accept="image/*"
+      hidden
+      onchange="previewImage(event)"
+    >
+
+    <div class="input">
+      <button onclick="document.getElementById('imageInput').click()">📎</button>
+      <button onclick="voice()">🎙</button>
+      <input
+        id="msg"
+        placeholder="Ask INFINEX anything..."
+        onkeydown="if(event.key==='Enter')send()"
+      >
+      <button onclick="send()">➤</button>
+    </div>
+
+    <button onclick="speak()">🔊 Read Answer</button>
+  </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
