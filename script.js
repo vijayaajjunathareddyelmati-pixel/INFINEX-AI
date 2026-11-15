@@ -94,8 +94,11 @@ function voice(){
 }
 function speak(){
  if(!last)return alert("No answer yet");
- speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(last));
-}
+ speechSynthesis.speak(
+ new SpeechSynthesisUtterance(
+  last.replace(/INFINEX AI/gi, "Infinite X A I")
+ )
+);
 function reminder(){
  let t=prompt("What should I remind you about?");
  if(!t)return;
@@ -113,5 +116,5 @@ if(chats.length)id=chats[0].id;
 history();render();
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js")
-    .catch(err => console.log("Service Worker:", err));
+  .catch(err => console.log("Service Worker:", err));
 }
