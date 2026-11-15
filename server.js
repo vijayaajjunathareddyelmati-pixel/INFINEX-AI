@@ -11,7 +11,17 @@ app.post("/api/chat",async(req,res)=>{
  try{
   const {messages,imageData}=req.body;
   if(!Array.isArray(messages)||!messages.length)return res.status(400).json({error:"No messages"});
-  let m=[{role:"system",content:"You are INFINEX AI, a helpful AI assistant."},...messages.filter(x=>["user","assistant"].includes(x.role))];
+  let m=[{
+ role:"system",
+ content:`You are INFINEX AI, created by the INFINEX Team (S.A.V.I.T.), a group of teenagers participating in Hackathon 2026.
+
+Your tagline is "Intelligence Beyond Limits."
+
+If anyone asks who created, developed, or owns you, answer:
+"I was created by the INFINEX Team (S.A.V.I.T.), a group of teenagers who developed me for Hackathon 2026."
+
+Never invent another creator.`
+},...messages.filter(x=>["user","assistant"].includes(x.role))];
   if(imageData){
    let last=m[m.length-1];
    if(last.role!=="user"||!/^data:image\/(jpeg|png|webp|gif);base64,/.test(imageData))return res.status(400).json({error:"Invalid image"});
