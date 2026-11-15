@@ -11,7 +11,6 @@ function history(){
   $("history").append(b);
  });
 }
-
 function newChat(){id=null;last="";removeImage();$("msg").value="";render();history()}
 function renameChat(){
  let c=chats.find(x=>x.id===id);
@@ -24,12 +23,13 @@ function clearHistory(){
  if(!confirm("Delete this chat?"))return;
  chats=chats.filter(c=>c.id!==id);id=null;last="";render();save();
 }
-
 function render(){
  $("chat").innerHTML="";
  let c=chats.find(x=>x.id===id);
  if(!c||!c.messages.length){
-  let p=document.createElement("p");p.textContent="INFINEX AI: Hello! How can I help you today?";$("chat").append(p);return;
+  let p=document.createElement("p");
+  p.textContent="INFINEX AI: Hello! How can I help you today?";
+  $("chat").append(p);return;
  }
  c.messages.forEach(m=>{
   let p=document.createElement("p");
@@ -39,18 +39,19 @@ function render(){
  });
  $("chat").scrollTop=$("chat").scrollHeight;
 }
-
 function previewImage(e){
- let f=e.target.files[0];
- if(!f)return;
- if(!f.type.startsWith("image/")||f.size>5*1024*1024){alert("Choose an image under 5 MB!");removeImage();return}
+ let f=e.target.files[0];if(!f)return;
+ if(!f.type.startsWith("image/")||f.size>5*1024*1024){
+  alert("Choose an image under 5 MB!");removeImage();return;
+ }
  imageFile=f;$("imagePreview").innerHTML="";
  let img=document.createElement("img");img.src=URL.createObjectURL(f);
  let b=document.createElement("button");b.textContent="✖ Remove";b.onclick=removeImage;
  $("imagePreview").append(img,b);
 }
-function removeImage(){imageFile=null;$("imageInput").value="";$("imagePreview").innerHTML=""}
-
+function removeImage(){
+ imageFile=null;$("imageInput").value="";$("imagePreview").innerHTML="";
+}
 async function send(){
  let msg=$("msg").value.trim();
  if((!msg&&!imageFile)||busy)return;
@@ -64,7 +65,8 @@ async function send(){
    let r=await fetch("/api/generate-image",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:msg})});
    let d=await r.json();if(!r.ok)throw Error(d.error||"Image generation failed");
    c.messages.push({role:"assistant",content:"Image generated successfully."});
-   render();let img=document.createElement("img");img.src=d.image;img.alt="Generated image";$("chat").append(img);
+   render();
+   let img=document.createElement("img");img.src=d.image;img.alt="Generated image";$("chat").append(img);
    save();
   }catch(e){alert(e.message)}
   finally{busy=false}
@@ -76,7 +78,9 @@ async function send(){
  c.messages.push({role:"user",content:msg||"Describe this image."});
  $("msg").value="";busy=true;render();save();
  try{
-  let imageData=f?await new Promise((ok,no)=>{let r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)}):null;
+  let imageData=f?await new Promise((ok,no)=>{
+   let r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f);
+  }):null;
   let r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:c.messages,imageData})});
   let d=await r.json();if(!r.ok)throw Error(d.error||"AI request failed");
   c.messages.push({role:"assistant",content:d.reply});last=d.reply;
@@ -84,7 +88,6 @@ async function send(){
  }catch(e){alert(e.message)}
  finally{busy=false}
 }
-
 function voice(){
  let S=window.SpeechRecognition||window.webkitSpeechRecognition;
  if(!S)return alert("Voice unavailable");
@@ -94,11 +97,9 @@ function voice(){
 }
 function speak(){
  if(!last)return alert("No answer yet");
- speechSynthesis.speak(
- new SpeechSynthesisUtterance(
-  last.replace(/INFINEX AI/gi, "Infinite X A I")
- )
-);
+ speechSynthesis.cancel();
+ speechSynthesis.speak(new SpeechSynthesisUtterance(last.replace(/INFINEX AI/gi,"Infinite X A I")));
+}
 function reminder(){
  let t=prompt("What should I remind you about?");
  if(!t)return;
@@ -114,7 +115,5 @@ function clock(){
 setInterval(clock,1000);clock();
 if(chats.length)id=chats[0].id;
 history();render();
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js")
-  .catch(err => console.log("Service Worker:", err));
-}
+if("serviceWorker" in navigator)
+ navigator.serviceWorker.register("/sw.js").catch(console.log);
