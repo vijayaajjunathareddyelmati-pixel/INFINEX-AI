@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,24 +12,57 @@
 <body>
 
 <header>
-  <h2>✦ INFINEX AI</h2>
+  <div class="header-brand">
+    <svg class="small-logo" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="smallGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#a855f7"/>
+          <stop offset="100%" stop-color="#38bdf8"/>
+        </linearGradient>
+      </defs>
+      <path
+        d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
+        fill="none"
+        stroke="url(#smallGradient)"
+        stroke-width="9"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </svg>
+    <h2>INFINEX AI</h2>
+  </div>
+
   <div><span id="clock"></span> | <span id="date"></span></div>
 </header>
 
 <main>
   <aside>
     <button onclick="newChat()">＋ New Chat</button>
-
     <h3>Chat History</h3>
     <div id="history"></div>
-
     <button onclick="renameChat()">✏️ Rename Chat</button>
     <button onclick="clearHistory()">🗑 Delete Chat</button>
     <button onclick="reminder()">⏰ Reminder</button>
   </aside>
 
   <section>
-    <div class="orb">✦</div>
+    <div class="brand-mark">
+      <svg viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#a855f7"/>
+            <stop offset="100%" stop-color="#38bdf8"/>
+          </linearGradient>
+        </defs>
+        <path
+          d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
+          fill="none"
+          stroke="url(#mainGradient)"
+          stroke-width="9"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+      </svg>
+    </div>
+
     <h1>INFINEX <span>AI</span></h1>
     <p>Intelligence Beyond Limits.</p>
 
@@ -38,22 +72,16 @@
 
     <div id="imagePreview"></div>
 
-    <input
-      type="file"
-      id="imageInput"
-      accept="image/*"
-      hidden
-      onchange="previewImage(event)"
-    >
+    <input type="file" id="imageInput"
+      accept="image/*" hidden
+      onchange="previewImage(event)">
 
     <div class="input">
       <button onclick="document.getElementById('imageInput').click()">📎</button>
       <button onclick="voice()">🎙</button>
-      <input
-        id="msg"
+      <input id="msg"
         placeholder="Ask INFINEX anything..."
-        onkeydown="if(event.key==='Enter')send()"
-      >
+        onkeydown="if(event.key==='Enter')send()">
       <button onclick="send()">➤</button>
     </div>
 
