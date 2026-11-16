@@ -7,8 +7,13 @@
   },
   "dependencies": {
     "@huggingface/inference": "^4.13.32",
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
-    "groq-sdk": "^0.9.0"
+    "express-session": "^1.19.0",
+    "google-auth-library": "^11.3.4",
+    "groq-sdk": "^0.9.0",
+    "mongodb": "^7.9.0"
   }
 }

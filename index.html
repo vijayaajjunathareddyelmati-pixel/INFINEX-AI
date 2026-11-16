@@ -3,90 +3,82 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>INFINEX AI</title>
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#080b16">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
-<header>
-  <div class="header-brand">
-    <svg class="small-logo" viewBox="0 0 100 100">
-      <defs>
-        <linearGradient id="smallGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#a855f7"/>
-          <stop offset="100%" stop-color="#38bdf8"/>
-        </linearGradient>
-      </defs>
-      <path
-        d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
-        fill="none"
-        stroke="url(#smallGradient)"
-        stroke-width="9"
-        stroke-linecap="round"
-        stroke-linejoin="round"/>
-    </svg>
-    <h2>INFINEX AI</h2>
+<aside id="sidebar">
+  <h2>∞ INFINEX AI</h2>
+  <button onclick="newChat()">+ New Chat</button>
+  <h3>Chat History</h3>
+  <div id="history"></div>
+  <button onclick="renameChat()">Rename Chat</button>
+  <button onclick="clearHistory()">Delete Chat</button>
+  <button onclick="reminder()">Reminders</button>
+
+  <div id="googleSignIn"></div>
+
+  <div id="profile" onclick="toggleProfile()">
+    <img id="profilePic" src="" alt="Profile">
+    <span id="profileLabel">Not logged in</span>
   </div>
 
-  <div><span id="clock"></span> | <span id="date"></span></div>
-</header>
+  <div id="profileMenu" hidden>
+    <img id="menuPic" src="" alt="Profile">
+    <p id="profileName"></p>
+    <p id="profileEmail"></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <a href="login.html">Login</a>
+  <a href="signup.html">Create Account</a>
+</aside>
 
 <main>
-  <aside>
-    <button onclick="newChat()">＋ New Chat</button>
-    <h3>Chat History</h3>
-    <div id="history"></div>
-    <button onclick="renameChat()">✏️ Rename Chat</button>
-    <button onclick="clearHistory()">🗑 Delete Chat</button>
-    <button onclick="reminder()">⏰ Reminder</button>
-  </aside>
-
-  <section>
-    <div class="brand-mark">
-      <svg viewBox="0 0 100 100">
+  <header>
+    <div class="logo">
+      <svg viewBox="0 0 100 100" width="48">
         <defs>
-          <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#a855f7"/>
-            <stop offset="100%" stop-color="#38bdf8"/>
+          <linearGradient id="g">
+            <stop stop-color="#a855f7"/>
+            <stop offset="1" stop-color="#38bdf8"/>
           </linearGradient>
         </defs>
-        <path
-          d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
-          fill="none"
-          stroke="url(#mainGradient)"
-          stroke-width="9"
-          stroke-linecap="round"
-          stroke-linejoin="round"/>
+        <path d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
+        fill="none" stroke="url(#g)" stroke-width="8"
+        stroke-linecap="round"/>
       </svg>
+      <h1>INFINEX AI</h1>
     </div>
-
-    <h1>INFINEX <span>AI</span></h1>
-    <p>Intelligence Beyond Limits.</p>
-
-    <div id="chat" aria-live="polite">
-      <p><b>INFINEX AI:</b> Hello! How can I help you today?</p>
+    <div>
+      <span id="date"></span>
+      <span id="clock"></span>
     </div>
+  </header>
 
-    <div id="imagePreview"></div>
-
-    <input type="file" id="imageInput"
-      accept="image/*" hidden
-      onchange="previewImage(event)">
-
-    <div class="input">
-      <button onclick="document.getElementById('imageInput').click()">📎</button>
-      <button onclick="voice()">🎙</button>
-      <input id="msg"
-        placeholder="Ask INFINEX anything..."
-        onkeydown="if(event.key==='Enter')send()">
-      <button onclick="send()">➤</button>
-    </div>
-
-    <button onclick="speak()">🔊 Read Answer</button>
+  <section id="chat">
+    <p>INFINEX AI: Hello! How can I help you today?</p>
   </section>
+
+  <div id="imagePreview"></div>
+
+  <div class="input-area">
+    
+<label for="imageInput" class="file-btn">📎 Choose File</label>
+<input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+
+    <textarea id="msg" placeholder="Ask INFINEX AI anything..."
+    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+
+    <button onclick="voice()" title="Voice">🎤</button>
+    <button onclick="speak()" title="Read answer">🔊</button>
+    <button onclick="send()" id="sendBtn">Send</button>
+  </div>
+
+  <footer>INFINEX AI · Intelligence Beyond Limits.</footer>
 </main>
 
 <script src="script.js"></script>
