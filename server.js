@@ -200,3 +200,5 @@ async function start(){
  }catch(e){console.error("STARTUP:",e.message);process.exit(1);}
 }
 start();
+const PORT=process.env.PORT||3000;
+app.listen(PORT,"0.0.0.0",()=>console.log("INFINEX AI running on port "+PORT));
