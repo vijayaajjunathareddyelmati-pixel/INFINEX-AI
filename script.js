@@ -1,5 +1,5 @@
 
-let chats=JSON.parse(localStorage.getItem("chats")||"[]"),id=null,last="",busy=false,imageFile=null;
+let chats=JSON.parse(localStorage.getItem("chats")||"[]"),id=null,last="",busy=false,imageFile=null,challengeText="";
 const $=x=>document.getElementById(x),API="/api";
 
 function save(){localStorage.setItem("chats",JSON.stringify(chats));history()}
@@ -34,6 +34,7 @@ function render(){
  });
  $("chat").scrollTop=$("chat").scrollHeight;
 }
+
 function previewImage(e){
  let f=e.target.files[0];if(!f)return;
  if(!f.type.startsWith("image/")||f.size>5*1024*1024){alert("Choose an image under 5 MB!");return removeImage()}
@@ -72,14 +73,106 @@ async function send(){
   removeImage();save();render();
  }catch(e){alert(e.message)}finally{busy=false}
 }
+
+// DAILY CHALLENGE ZONE
+function showChallenges(){
+ let open=$("challengeZone").hidden;
+ $("challengeZone").hidden=!open;
+ $("chat").hidden=open;
+ document.querySelector(".input-area").hidden=open;
+ $("imagePreview").hidden=open;
+ if(open)getChallenge();
+}
+
+async function challengeAI(prompt){
+ let context=chats.flatMap(c=>c.messages||[])
+  .filter(m=>["user","assistant"].includes(m.role))
+  .slice(-20).map(m=>({role:m.role,content:String(m.content).slice(0,500)}));
+ let r=await fetch(API+"/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[...context,{role:"user",content:prompt}]})});
+ let d=await r.json();if(!r.ok)throw Error(d.error||"Challenge AI unavailable");
+ return d.reply;
+}
+
+async function getChallenge(){
+ const today=new Date().toLocaleDateString("en-CA");
+ const saved=JSON.parse(localStorage.getItem("dailyChallenge")||"null");
+ const box=$("challenge");
+
+ if(saved?.date===today){
+  challengeText=saved.text;
+  showDailyChallenge();
+  return;
+ }
+
+ box.textContent="✨ Creating today's challenge...";
+ challengeText="";
+
+ let topics=["maths","science","coding","logic","general knowledge","brainstorming","story writing","language","technology"];
+ let topic=topics[Math.floor(Math.random()*topics.length)];
+
+ try{
+  challengeText=await challengeAI(
+   "Create ONE "+topic+" challenge. Infer the student's grade, level and interests from previous conversations. If unknown, use beginner level. Maximum 10 short lines. Give instructions only. NEVER reveal the answer or solution. Keep it friendly, safe and age-appropriate."
+  );
+
+  localStorage.setItem("dailyChallenge",JSON.stringify({
+   date:today,
+   text:challengeText
+  }));
+
+  showDailyChallenge();
+ }catch(e){
+  box.textContent="Could not load challenge: "+e.message;
+ }
+}
+
+function showDailyChallenge(){
+ const box=$("challenge");
+ box.innerHTML="";
+
+ const p=document.createElement("p");
+ p.textContent=challengeText;
+
+ const input=document.createElement("input");
+ input.id="challengeAnswer";
+ input.placeholder="Your answer...";
+
+ const btn=document.createElement("button");
+ btn.textContent="Submit Answer";
+ btn.onclick=checkChallenge;
+
+ const note=document.createElement("p");
+ note.textContent="🌟 Come back tomorrow for your next challenge!";
+
+ box.append(p,input,btn,note);
+}
+
+async function checkChallenge(){
+ let answer=$("challengeAnswer")?.value.trim();
+ if(!answer)return alert("Enter your answer first!");
+ let result=document.createElement("p"),box=$("challenge");
+ result.textContent="Checking your answer...";box.append(result);
+ try{
+  let feedback=await challengeAI(
+   "Evaluate this challenge:\n"+challengeText+
+   "\nStudent answer: "+answer+
+   "\nGive accurate, friendly feedback. Briefly explain mistakes and encourage learning."
+  );
+  result.textContent="INFINEX AI: "+feedback;
+ }catch(e){result.textContent=e.message}
+}
+
 function voice(){
  let S=window.SpeechRecognition||window.webkitSpeechRecognition;
  if(!S)return alert("Voice unavailable");
- let s=new S();s.lang="en-IN";s.onresult=e=>{$("msg").value=e.results[0][0].transcript;send()};s.start();
+ let s=new S();s.lang="en-IN";
+ s.onresult=e=>{$("msg").value=e.results[0][0].transcript;send()};
+ s.start();
 }
 function speak(){
  if(!last)return alert("No answer yet");
- speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(last.replace(/INFINEX AI/gi,"Infinite X A I")));
+ speechSynthesis.cancel();
+ speechSynthesis.speak(new SpeechSynthesisUtterance(last.replace(/INFINEX AI/gi,"Infinite X A I")));
 }
 function reminder(){
  let t=prompt("What should I remind you about?");if(!t)return;
@@ -92,9 +185,9 @@ function clock(){
  $("date").textContent=new Date().toLocaleDateString();
 }
 
-/* GOOGLE SIGN-IN */
-
+// GOOGLE SIGN-IN
 const GOOGLE_CLIENT_ID="742992644002-3uhqhgtdgh2cgs5tddojkm4bmeom4cki.apps.googleusercontent.com";
+
 async function googleLogin(response){
  try{
   let r=await fetch(API+"/auth/google",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({credential:response.credential})});
@@ -107,25 +200,33 @@ function initGoogle(){
  google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:googleLogin});
  google.accounts.id.renderButton($("googleSignIn"),{theme:"filled_black",size:"large",shape:"pill"});
 }
+function fitName(el){
+ if(!el)return;
+ let size=16;el.style.fontSize=size+"px";
+ while(el.scrollWidth>el.clientWidth&&size>9){size--;el.style.fontSize=size+"px"}
+}
 async function loadProfile(){
  try{
   let r=await fetch(API+"/auth/me"),d=await r.json();
-  if(!d.loggedIn)return;
-  $("profileLabel").textContent=d.name;
-  $("profileName").textContent=d.name;
-  $("profileEmail").textContent=d.email;
-  $("profilePic").src=$("menuPic").src=d.picture||"";
-  $("googleSignIn").hidden=true;
- }catch(e){console.log(e)}
+  $("authLinks").hidden=!!d.loggedIn;
+  $("googleSignIn").hidden=!!d.loggedIn;
+  $("profile").hidden=!d.loggedIn;
+  $("profileMenu").hidden=true;
+  if(d.loggedIn){
+   $("profileLabel").textContent=d.name;
+   $("profileName").textContent=d.name;
+   $("profileEmail").textContent=d.email;
+   fitName($("profileLabel"));fitName($("profileName"));
+  }
+ }catch(e){console.log("Profile check failed:",e)}
 }
-function toggleProfile(){
- $("profileMenu").hidden=!$("profileMenu").hidden;
-}
+function toggleProfile(){$("profileMenu").hidden=!$("profileMenu").hidden}
 async function logout(){
  try{
-  await fetch(API+"/auth/logout",{method:"POST"});
+  let r=await fetch(API+"/auth/logout",{method:"POST"});
+  if(!r.ok)throw Error("Logout failed");
   google.accounts.id.disableAutoSelect();location.reload();
- }catch(e){alert("Logout failed")}
+ }catch(e){alert(e.message)}
 }
 
 setInterval(clock,1000);clock();
