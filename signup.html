@@ -1,26 +1,68 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sign Up | INFINEX AI</title>
-<link rel="stylesheet" href="auth.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account - INFINEX AI</title>
+
+    <link rel="stylesheet" href="auth.css">
 </head>
+
 <body>
-<div class="auth-box">
-<h1>INFINEX AI</h1>
-<p>Intelligence Beyond Limits.</p>
-<h2>Create Account</h2>
-<form id="signupForm">
-<input name="name" placeholder="Full Name" required>
-<input name="email" type="email" placeholder="Email Address" required>
-<input name="password" type="password" placeholder="Password (8+ characters)" minlength="8" required>
-<button type="submit">Create Account</button>
-</form>
-<p id="message"></p>
-<p>Already registered? <a href="login.html">Log In</a></p>
-</div>
-<script src="auth.js"></script>
+
+    <div class="auth-box">
+
+        <h1>∞ INFINEX AI</h1>
+
+        <p>Create your account and get started!</p>
+
+        <form id="signupForm">
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+            >
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Email address"
+                autocomplete="email"
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Create a password"
+                autocomplete="new-password"
+                required
+            >
+
+            <button type="submit">Create Account</button>
+
+        </form>
+
+        <p id="message"></p>
+
+        <p>
+            Already have an account?
+            <a href="login.html">Login</a>
+        </p>
+
+        <p>
+            <a href="index.html">← Back to INFINEX AI</a>
+        </p>
+
+    </div>
+
+    <script src="auth.js"></script>
+
 </body>
 </html>

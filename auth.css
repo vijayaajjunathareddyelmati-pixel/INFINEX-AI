@@ -1,34 +1,101 @@
 
-*{box-sizing:border-box}
-body{
- margin:0;min-height:100vh;display:grid;
- place-items:center;background:#080d1c;
- color:white;font-family:Arial,sans-serif;
+/* ------------------------------
+   INFINEX AI - Login and signup
+   ------------------------------ */
+
+/* Basic page setup */
+
+* {
+    box-sizing: border-box;
 }
-.auth-box{
- width:min(90%,400px);padding:35px;
- background:#111a30;border:1px solid #34415e;
- border-radius:18px;text-align:center;
- box-shadow:0 0 35px #743cff22;
+
+body {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 15px;
+    background: #080d1c;
+    color: white;
+    font-family: Arial, sans-serif;
 }
-h1{
- background:linear-gradient(90deg,#a855f7,#38bdf8);
- background-clip:text;color:transparent;
+
+/* Login and signup container */
+
+.auth-box {
+    width: min(90%, 400px);
+    padding: 35px;
+    background: #111a30;
+    border: 1px solid #34415e;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 0 35px #743cff22;
 }
-.auth-box p{color:#aab5ce}
-input,button{
- width:100%;padding:14px;margin:10px 0;
- border-radius:9px;font-size:15px;
+
+/* Heading */
+
+.auth-box h1 {
+    background: linear-gradient(90deg, #a855f7, #38bdf8);
+    background-clip: text;
+    color: transparent;
 }
-input{
- background:#080d1c;color:white;
- border:1px solid #34415e;
+
+/* Description */
+
+.auth-box p {
+    color: #aab5ce;
 }
-button{
- border:0;color:white;cursor:pointer;
- background:linear-gradient(90deg,#9333ea,#0891b2);
- font-weight:bold;
+
+/* Input fields and buttons */
+
+.auth-box input,
+.auth-box button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 14px;
+    border-radius: 9px;
+    font-size: 15px;
 }
-button:hover{opacity:.85}
-a{color:#38bdf8;text-decoration:none}
-#message{color:#38bdf8}
+
+/* Input fields */
+
+.auth-box input {
+    background: #080d1c;
+    color: white;
+    border: 1px solid #34415e;
+}
+
+/* Buttons */
+
+.auth-box button {
+    border: 0;
+    background: linear-gradient(90deg, #9333ea, #0891b2);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auth-box button:hover {
+    opacity: 0.85;
+}
+
+/* Links */
+
+.auth-box a {
+    color: #38bdf8;
+    text-decoration: none;
+}
+
+/* Login and signup messages */
+
+#message {
+    color: #38bdf8;
+}
+
+/* Mobile screens */
+
+@media (max-width: 450px) {
+    .auth-box {
+        padding: 25px;
+    }
+}

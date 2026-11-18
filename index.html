@@ -2,84 +2,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>INFINEX AI</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<style>
-#profilePic,#menuPic{display:none!important}
-#profileLabel{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-#profileName{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:clamp(11px,3vw,16px)}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080b16">
+    <link rel="manifest" href="manifest.json">
+    <title>INFINEX AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
+
 <body>
-<aside id="sidebar">
-<h2>∞ INFINEX AI</h2>
-<button onclick="newChat()">+ New Chat</button>
-<h3>Chat History</h3>
-<div id="history"></div>
-<button onclick="renameChat()">Rename Chat</button>
-<button onclick="clearHistory()">Delete Chat</button>
-<button onclick="reminder()">Reminders</button>
-<button onclick="showChallenges()">🎯 Challenge Zone</button>
-<div id="googleSignIn"></div>
-<div id="profile" onclick="toggleProfile()">
-<img id="profilePic" src="" alt="Profile">
-<span id="profileLabel">Not logged in</span>
-</div>
-<div id="profileMenu" hidden>
-<img id="menuPic" src="" alt="Profile">
-<p id="profileName"></p>
-<p id="profileEmail"></p>
-<button onclick="logout()">Logout</button>
-</div>
-<div id="authLinks">
-  <a href="login.html">Login</a>
-  <a href="signup.html">Create Account</a>
-</div>
-</aside>
 
-<main>
-<header>
-<div class="logo">
-<svg viewBox="0 0 100 100" width="48">
-<defs>
-<linearGradient id="g">
-<stop stop-color="#a855f7"/>
-<stop offset="1" stop-color="#38bdf8"/>
-</linearGradient>
-</defs>
-<path d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
-fill="none" stroke="url(#g)" stroke-width="8" stroke-linecap="round"/>
-</svg>
-<h1>INFINEX AI</h1>
-</div>
-<div><span id="date"></span> <span id="clock"></span></div>
-</header>
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
 
-<section id="chat">
-<p>INFINEX AI: Hello! How can I help you today?</p>
-</section>
+        <h2>∞ INFINEX AI</h2>
 
-<section id="challengeZone" hidden>
-<h2>🎯 Challenge Zone</h2>
-<p>Ready for a fun random challenge?</p>
-<button onclick="getChallenge()">✨ Get Challenge</button>
-<div id="challenge"></div>
-</section>
+        <button onclick="newChat()">➕ New Chat</button>
 
-<div id="imagePreview"></div>
-<div class="input-area">
-<label for="imageInput" class="file-btn">📎 Choose File</label>
-<input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
-<textarea id="msg" placeholder="Ask INFINEX AI anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
-<button onclick="voice()" title="Voice">🎤</button>
-<button onclick="speak()" title="Read answer">🔊</button>
-<button onclick="send()" id="sendBtn">Send</button>
-</div>
-<footer>INFINEX AI · Intelligence Beyond Limits.</footer>
-</main>
-<script src="script.js"></script>
+        <h3>Chat History</h3>
+
+        <button onclick="showChallenges()">🎯 Challenge Zone</button>
+        <button onclick="showRecords()">📒 RECORD</button>
+
+        <div id="history"></div>
+
+        <button onclick="renameChat()">✏️ Rename Chat</button>
+        <button onclick="clearHistory()">🗑️ Delete Chat</button>
+        <button onclick="reminder()">⏰ Reminders</button>
+
+        <!-- GOOGLE SIGN IN -->
+        <div id="googleSignIn"></div>
+
+        <!-- PROFILE -->
+        <div id="profile" onclick="toggleProfile()" hidden>
+            <img id="profilePic" src="" alt="Profile">
+            <span id="profileLabel">Not logged in</span>
+        </div>
+
+        <div id="profileMenu" hidden>
+            <img id="menuPic" src="" alt="Profile">
+            <p id="profileName"></p>
+            <p id="profileEmail"></p>
+            <button onclick="logout()">Logout</button>
+        </div>
+
+        <!-- AUTH LINKS -->
+        <div id="authLinks">
+            <a href="login.html">Login</a>
+            <a href="signup.html">Create Account</a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- HEADER -->
+        <header>
+
+            <div class="logo">
+
+                <svg viewBox="0 0 100 100" width="48">
+                    <defs>
+                        <linearGradient id="logoGradient">
+                            <stop stop-color="#a855f7" />
+                            <stop offset="1" stop-color="#38bdf8" />
+                        </linearGradient>
+                    </defs>
+
+                    <path
+                        d="M10 50 C10 20 40 20 50 50 C60 80 90 80 90 50 C90 20 60 20 50 50 C40 80 10 80 10 50"
+                        fill="none"
+                        stroke="url(#logoGradient)"
+                        stroke-width="8"
+                        stroke-linecap="round">
+                    </path>
+                </svg>
+
+                <h1>INFINEX AI</h1>
+
+            </div>
+
+            <div class="date-time">
+                <span id="date"></span>
+                <span id="clock"></span>
+            </div>
+
+        </header>
+
+
+        <!-- NORMAL CHAT -->
+        <section id="chat" aria-live="polite">
+            <p>INFINEX AI: Hello! How can I help you today? 👋</p>
+        </section>
+
+
+        <!-- CHALLENGE ZONE -->
+        <section id="challengeZone" hidden>
+
+            <div class="challenge-header">
+                <h2>🎯 INFINEX Challenge Zone</h2>
+
+                <button onclick="closeChallenges()">
+                    ✖ Close
+                </button>
+            </div>
+
+            <p>Welcome to your personal AI Challenge Zone!</p>
+            <p>Get random challenges created by INFINEX AI.</p>
+
+            <div id="challenge">
+                ✨ Preparing your challenge...
+            </div>
+
+            <button onclick="getChallenge()">
+                🎲 Get New Challenge
+            </button>
+
+        </section>
+
+
+        <!-- RECORD SECTION -->
+        <section id="recordZone" hidden>
+
+            <div class="record-header">
+                <h2>📒 INFINEX RECORD</h2>
+
+                <button onclick="closeRecords()">
+                    ✖ Close
+                </button>
+            </div>
+
+            <p class="record-description">
+                Your personal space to save important information,
+                measurements, achievements, notes and more.
+                Your records are private to your account.
+            </p>
+
+
+            <!-- ADD RECORD FORM -->
+            <form
+                class="record-form"
+                id="recordForm"
+                onsubmit="event.preventDefault(); saveRecord();">
+
+                <h3>➕ Add a New Record</h3>
+
+                <input
+                    type="text"
+                    id="recordTitle"
+                    placeholder="Record title (e.g. Height)"
+                    maxlength="100"
+                    required>
+
+                <select id="recordCategory">
+                    <option value="General">General</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Education">Education</option>
+                    <option value="Achievement">Achievement</option>
+                    <option value="Health">Health</option>
+                    <option value="Work">Work</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <input
+                    type="text"
+                    id="recordValue"
+                    placeholder="Record value (e.g. 160 cm)"
+                    maxlength="2000"
+                    required>
+
+                <textarea
+                    id="recordNotes"
+                    placeholder="Additional notes (optional)"
+                    maxlength="2000"></textarea>
+
+                <button type="submit" id="recordSaveBtn">
+                    💾 Save Record
+                </button>
+
+            </form>
+
+
+            <!-- SAVED RECORDS -->
+            <div class="record-section">
+
+                <h3>📚 Your Saved Records</h3>
+
+                <div id="recordStatus"></div>
+
+                <div id="recordList" class="record-list">
+                    <div class="record-empty">
+                        Your saved records will appear here.
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- IMAGE PREVIEW -->
+        <div id="imagePreview"></div>
+
+
+        <!-- CHAT INPUT -->
+        <div class="input-area">
+
+            <label for="imageInput" class="file-btn">
+                📎 Choose File
+            </label>
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+                onchange="previewImage(event)">
+
+            <textarea
+                id="msg"
+                placeholder="Ask INFINEX AI anything..."
+                onkeydown="if(event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    send();
+                }"></textarea>
+
+            <button onclick="voice()" title="Voice input">
+                🎤
+            </button>
+
+            <button onclick="speak()" title="Read answer aloud">
+                🔊
+            </button>
+
+            <button onclick="send()" id="sendBtn">
+                Send
+            </button>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <p>INFINEX AI · Intelligence Beyond Limits.</p>
+
+            <p>
+                Created by INFINEX Team (S.A.V.I.T.) · Hackathon 2026
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+
 </body>
 </html>
